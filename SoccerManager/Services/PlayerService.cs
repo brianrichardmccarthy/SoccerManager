@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using FluentValidation;
 using SoccerManager.Models;
 
-namespace SoccerManager.Controllers;
-public class PlayerController(AbstractValidator<Player> playerValidator) : IPlayerController
+namespace SoccerManager.Services;
+public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerService
 {
     private readonly Dictionary<string, Player> _players = new();
     private readonly AbstractValidator<Player> _playerValidator = playerValidator ?? throw new ArgumentNullException(nameof(playerValidator));

@@ -1,7 +1,7 @@
 ﻿using SoccerManager.Models;
 
-namespace SoccerManager.Controllers;
-public interface IPlayerController
+namespace SoccerManager.Services;
+public interface IPlayerService
 {
     string Create(string name, PlayerPosition position, int skillRating);
     bool Remove(string name);

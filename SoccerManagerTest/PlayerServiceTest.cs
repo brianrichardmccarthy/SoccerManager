@@ -1,22 +1,22 @@
 using FluentAssertions;
 using NUnit.Framework;
-using SoccerManager.Controllers;
 using SoccerManager.Models;
+using SoccerManager.Services;
 using SoccerManager.Validators;
 
-namespace SoccerManagerTest;
+namespace SoccerManagerTests;
 
 [TestFixture]
-public class PlayerControllerTest
+public class PlayerServiceTest
 {
-    private PlayerController _playerController = null!;
+    private PlayerService _playerController = null!;
     private CreateValidator _createValidator = null!;
 
     [SetUp]
     public void Setup()
     {
         _createValidator = new CreateValidator();
-        _playerController = new PlayerController(_createValidator);
+        _playerController = new PlayerService(_createValidator);
     }
 
     #region Constructor
@@ -24,7 +24,7 @@ public class PlayerControllerTest
     public void PlayerController_WhenNullValidator_ThrowsException()
     {
         // Act
-        Action act = () => _ = new PlayerController(null!);
+        Action act = () => _ = new PlayerService(null!);
 
         // Assert
         act.Should().Throw<ArgumentNullException>();
