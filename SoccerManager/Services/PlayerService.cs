@@ -77,7 +77,7 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
             search = search.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        if (position is not null)
+        if (position is not null && Enum.IsDefined(typeof(PlayerPosition), position))
         {
             search = search.Where(p => p.Position == position);
         }
