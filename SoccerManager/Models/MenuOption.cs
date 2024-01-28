@@ -1,7 +1,8 @@
 ﻿namespace SoccerManager.Models;
 public enum MenuOption
 {
-    Create = 1,
+    None,
+    Create,
     Remove,
     Update,
     Search,

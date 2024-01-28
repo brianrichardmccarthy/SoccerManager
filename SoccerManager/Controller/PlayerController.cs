@@ -17,8 +17,9 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
             Console.WriteLine("5. Get Player By Name");
             Console.WriteLine("6. Display All Players");
             Console.WriteLine("7. Exit");
-            
-            option = (MenuOption)int.Parse(Console.ReadLine() ?? "0");
+
+            var isValid = int.TryParse(Console.ReadLine() ?? "0", out var input);
+            option = isValid ? (MenuOption)input : MenuOption.None;
 
             switch (option)
             {
@@ -42,8 +43,10 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
                     break;
                 case MenuOption.Exit:
                     break;
+                case MenuOption.None:
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    Console.WriteLine("Invalid Option please enter a number between 1 and 7");
+                    break;
             }
 
         } while (option != MenuOption.Exit);
@@ -54,10 +57,19 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
         Console.WriteLine("Enter Player Name: ");
         var name = Console.ReadLine() ?? string.Empty;
         Console.WriteLine("Enter Player Position: ");
-        var position = (PlayerPosition)int.Parse(Console.ReadLine() ?? "0");
-        Console.WriteLine("Enter Player Skill Rating: ");
-        var skillRating = int.Parse(Console.ReadLine() ?? "0");
-        var response = _playerService.Create(name, position, skillRating);
+        foreach (var option in Enum.GetValues(typeof(PlayerPosition)))
+        {
+            Console.WriteLine($"{(int)option}. {option}");
+        }
+
+        int positionAsInt;
+        while (!int.TryParse(Console.ReadLine() ?? string.Empty, out positionAsInt))
+        {
+            Console.WriteLine("invalid option please enter a number between 1 and 4");
+        }
+
+        var skillRating = ReadSkillRankFromConsole();
+        var response = _playerService.Create(name, (PlayerPosition)positionAsInt, skillRating);
         Console.WriteLine(response);
     }
 
@@ -73,8 +85,7 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
     {
         Console.WriteLine("Enter Player Name: ");
         var name = Console.ReadLine() ?? string.Empty;
-        Console.WriteLine("Enter Player Skill Rating: ");
-        var skillRating = int.Parse(Console.ReadLine() ?? "0");
+        var skillRating = ReadSkillRankFromConsole();
         var response = _playerService.UpdateSkillRank(name, skillRating);
         Console.WriteLine(response);
     }
@@ -82,13 +93,14 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
     public void SearchPlayers()
     {
         Console.WriteLine("Enter Player Name or Press Enter to skip: ");
-        var name = Console.ReadLine();
+        var name = Console.ReadLine() ?? string.Empty;
         Console.WriteLine("Enter Player Position or Press Enter to skip: ");
-        var position = (PlayerPosition)int.Parse(Console.ReadLine() ?? "0");
+        var includePosition = int.TryParse(Console.ReadLine() ?? string.Empty, out var positionAsInt);
+        var position = includePosition ? (PlayerPosition) positionAsInt : (PlayerPosition?)null;
         var players = _playerService.Search(name, position);
         foreach (var player in players)
         {
-            Console.WriteLine(player);
+            Console.WriteLine(player.ToString());
         }
     }
 
@@ -97,11 +109,15 @@ public class PlayerController(IPlayerService playerService) : IPlayerController
         Console.WriteLine("Enter Player Name: ");
         var name = Console.ReadLine() ?? string.Empty;
         var player = _playerService.GetByName(name);
-        Console.WriteLine(player);
+        Console.WriteLine(player is not null ? player.ToString() : $"Player {name} not found");
     }
 
-    public void DisplayAllPlayers()
+    public void DisplayAllPlayers() => Console.WriteLine(_playerService.ToString());
+
+    private int ReadSkillRankFromConsole()
     {
-        Console.WriteLine(_playerService.ToString());
+        Console.WriteLine("Enter Player Skill Rating: ");
+        var skillRating = int.Parse(Console.ReadLine() ?? "0");
+        return skillRating;
     }
 }

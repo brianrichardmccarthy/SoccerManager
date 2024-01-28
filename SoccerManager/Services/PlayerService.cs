@@ -86,10 +86,10 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
 
     public override string ToString()
     {
-        var stringBuilder = new StringBuilder(base.ToString());
+        var stringBuilder = new StringBuilder();
         foreach (var (_, player) in _players)
         {
-            stringBuilder.AppendLine($"{player.Name} - {player.Position} - {player.SkillRating}");
+            stringBuilder.AppendLine(player.ToString());
         }
         return stringBuilder.ToString();
     }
