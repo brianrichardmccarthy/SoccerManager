@@ -46,7 +46,7 @@ public class PlayerServiceTest
     }
 
     [TestCase("Name is required", "", PlayerPosition.Forward, 1)]
-    [TestCase("Position is required", "abc", (PlayerPosition)100, 1)]
+    [TestCase("Position is required and must be between 1 and 4 inclusive", "abc", (PlayerPosition)100, 1)]
     [TestCase("Skill Rating must be between 1 and 100", "abc", PlayerPosition.Forward, 0)]
     [TestCase("Skill Rating must be between 1 and 100", "abc", PlayerPosition.Forward, 101)]
     public void Create_WhenInvalidPlayer_ReturnsErrorMessage(string expected, string name, PlayerPosition playerPosition, int skillRating)
