@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using FluentValidation;
 using SoccerManager.Models;
+using SoccerManager.Helpers;
 
 namespace SoccerManager.Services;
 public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerService
@@ -71,17 +72,10 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
 
     public List<Player> Search(string? name = null, PlayerPosition? position = null)
     {
-        var search = _players.Select(p => p.Value);
-        if (!string.IsNullOrEmpty(name))
-        {
-            search = search.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
-        }
-
-        if (position is not null && Enum.IsDefined(typeof(PlayerPosition), position))
-        {
-            search = search.Where(p => p.Position == position);
-        }
-        return search.ToList();
+        return _players.Values
+            .WhereIf(!string.IsNullOrEmpty(name), p => p.Name.Contains(name!, StringComparison.OrdinalIgnoreCase))
+            .WhereIf(position is not null && Enum.IsDefined(typeof(PlayerPosition), position), p => p.Position == position)
+            .ToList();
     }
 
     public override string ToString()
