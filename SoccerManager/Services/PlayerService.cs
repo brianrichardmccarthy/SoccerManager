@@ -17,7 +17,8 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
             Position = position,
             SkillRating = skillRating
         };
-
+        
+        // Basic validation
         var isValid = _playerValidator.Validate(player);
         if (!isValid.IsValid)
         {
@@ -46,6 +47,7 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
 
     public string UpdateSkillRank(string name, int skillRank)
     {
+        // Basic validation on input and list of players
         if (string.IsNullOrWhiteSpace(name))
         {
             return "Name is required";
@@ -72,6 +74,7 @@ public class PlayerService(AbstractValidator<Player> playerValidator) : IPlayerS
 
     public List<Player> Search(string? name = null, PlayerPosition? position = null)
     {
+        // use helper methods to filter the list if needed
         return _players.Values
             .WhereIf(!string.IsNullOrEmpty(name), p => p.Name.Contains(name!, StringComparison.OrdinalIgnoreCase))
             .WhereIf(position is not null && Enum.IsDefined(typeof(PlayerPosition), position), p => p.Position == position)

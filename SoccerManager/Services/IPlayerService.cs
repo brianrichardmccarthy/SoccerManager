@@ -1,6 +1,9 @@
 ﻿using SoccerManager.Models;
 
 namespace SoccerManager.Services;
+/// <summary>
+/// Basic CRUD operations for a player.
+/// </summary>
 public interface IPlayerService
 {
     string Create(string name, PlayerPosition position, int skillRating);

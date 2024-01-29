@@ -2,6 +2,9 @@
 using SoccerManager.Models;
 
 namespace SoccerManager.Validators;
+/// <summary>
+/// Basic create validator for Player class
+/// </summary>
 public class CreateValidator : AbstractValidator<Player>
 {
     public CreateValidator()

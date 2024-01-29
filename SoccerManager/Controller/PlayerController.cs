@@ -2,6 +2,10 @@
 using SoccerManager.Services;
 
 namespace SoccerManager.Controller;
+/// <summary>
+/// Basic Console Controller for Player
+/// </summary>
+/// <param name="playerService"></param>
 public class PlayerController(IPlayerService playerService) : IPlayerController
 {
     private readonly IPlayerService _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
